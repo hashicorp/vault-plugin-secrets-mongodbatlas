@@ -245,6 +245,7 @@ func (b *Backend) pathProgrammaticAPIKeyRollback(ctx context.Context, req *logic
 			}
 			return err
 		}
+		return nil
 	}
 
 	if isProjectKey(entry.OrganizationID, entry.ProjectID) {
@@ -256,6 +257,7 @@ func (b *Backend) pathProgrammaticAPIKeyRollback(ctx context.Context, req *logic
 			}
 			return err
 		}
+		return nil
 	}
 
 	return fmt.Errorf("Programmatic API key %s type not found, not deleting", entry.ProgrammaticAPIKeyID)
