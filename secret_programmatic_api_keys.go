@@ -127,6 +127,32 @@ func createProjectAPIKey(ctx context.Context, client *mongodbatlas.Client, apiKe
 			Desc:  apiKeyDescription,
 			Roles: credentialEntry.Roles,
 		})
+	if err != nil {
+		return nil, err
+	}
+
+	orgIDs := map[string]interface{}{}
+
+	// this is the only way to get the orgID needed for this request
+	for _, r := range key.Roles {
+		if _, ok := orgIDs[r.OrgID]; !ok {
+			if len(r.OrgID) > 0 {
+				orgIDs[r.OrgID] = 1
+			}
+		}
+	}
+
+	// if we have whitelist entries and no orgIds then return an error
+	if (len(credentialEntry.IPAddresses)+len(credentialEntry.CIDRBlocks)) > 0 && len(orgIDs) == 0 {
+		return nil, fmt.Errorf("No organization ID was found on programmatic key roles")
+	}
+
+	for orgID := range orgIDs {
+		if err := addWhitelistEntry(ctx, client, orgID, key.ID, credentialEntry); err != nil {
+			return nil, err
+		}
+	}
+
 	return key, err
 }
 
