@@ -57,6 +57,26 @@ func TestAcceptanceProgrammaticAPIKey_WithProjectID(t *testing.T) {
 
 }
 
+func TestAcceptanceProgrammaticAPIKey_WithProjectIDRenew(t *testing.T) {
+	if !runAcceptanceTests {
+		t.SkipNow()
+	}
+
+	acceptanceTestEnv, err := newAcceptanceTestEnv()
+	if err != nil {
+		t.Fatal(err)
+	}
+
+	t.Run("add config", acceptanceTestEnv.AddConfig)
+	t.Run("add programmatic API Key role", acceptanceTestEnv.AddProgrammaticAPIKeyRoleWithProjectIDWithTTL)
+	t.Run("read programmatic API key cred", acceptanceTestEnv.ReadProgrammaticAPIKeyRule)
+	t.Run("check lease for programmatic API key cred", acceptanceTestEnv.CheckLease)
+	t.Run("extend programmatic API key creds", acceptanceTestEnv.RenewProgrammaticAPIKeysWithExtendedLease)
+	t.Run("check lease for programmatic API key cred", acceptanceTestEnv.CheckExtendedLease)
+	t.Run("revoke programmatic API key creds", acceptanceTestEnv.RevokeProgrammaticAPIKeys)
+
+}
+
 func TestAcceptanceProgrammaticAPIKey_ProjectWithIPWhitelist(t *testing.T) {
 	if !runAcceptanceTests {
 		t.SkipNow()
