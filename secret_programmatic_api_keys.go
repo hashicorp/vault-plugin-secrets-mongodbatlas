@@ -290,7 +290,23 @@ func (b *Backend) pathProgrammaticAPIKeyRollback(ctx context.Context, req *logic
 
 		}
 
-		orgID := foundKey.Roles[0].OrgID
+		if len(foundKey.Roles) == 0 {
+			return fmt.Errorf("missing roles on programmatic key %s", foundKey.ID)
+		}
+
+		// find the first orgID
+		orgID := ""
+		for _, r := range foundKey.Roles {
+			if len(r.OrgID) > 0 {
+				orgID = r.OrgID
+				break
+			}
+		}
+
+		// if orgID it's not found, return an error
+		if len(orgID) == 0 {
+			return fmt.Errorf("missing orgID on programmatic key %s", foundKey.ID)
+		}
 
 		// now, delete the user
 		res, err := client.ProjectAPIKeys.Unassign(ctx, entry.ProjectID, entry.ProgrammaticAPIKeyID)
