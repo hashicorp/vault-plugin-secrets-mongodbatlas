@@ -33,9 +33,9 @@ func (b *Backend) programmaticAPIKeys() *framework.Secret {
 	}
 }
 
-func (b *Backend) programmaticAPIKeyCreate(ctx context.Context, s logical.Storage, displayName string, cred *atlasCredentialEntry) (*logical.Response, error) {
+func (b *Backend) programmaticAPIKeyCreate(ctx context.Context, s logical.Storage, role string, cred *atlasCredentialEntry) (*logical.Response, error) {
 
-	apiKeyDescription, err := genUsername(displayName)
+	apiKeyDescription, err := genAPIKeyDescription(role)
 	if err != nil {
 		return nil, errwrap.Wrapf("error generating username: {{err}}", err)
 	}
@@ -44,7 +44,7 @@ func (b *Backend) programmaticAPIKeyCreate(ctx context.Context, s logical.Storag
 		return logical.ErrorResponse(err.Error()), nil
 	}
 	walID, err := framework.PutWAL(ctx, s, programmaticAPIKey, &walEntry{
-		UserName: apiKeyDescription,
+		Role: apiKeyDescription,
 	})
 	if err != nil {
 		return nil, errwrap.Wrapf("error writing WAL entry: {{err}}", err)
@@ -265,8 +265,18 @@ func (b *Backend) pathProgrammaticAPIKeyRollback(ctx context.Context, req *logic
 
 func (b *Backend) programmaticAPIKeysRenew(ctx context.Context, req *logical.Request, d *framework.FieldData) (*logical.Response, error) {
 	// Get the lease (if any)
-
 	defaultLease, maxLease := b.getDefaultAndMaxLease()
+
+	// //get the role
+	// roleRaw, ok := req.Secret.InternalData["role"]
+	// if !ok {
+	// 	return nil, errors.New("internal data 'role' not found")
+	// }
+
+	// role, err := getRole(ctx, roleRaw.(string), req.Storage)
+	// if err != nil {
+	// 	return nil, err
+	// }
 
 	resp := &logical.Response{Secret: req.Secret}
 	resp.Secret.TTL = defaultLease
