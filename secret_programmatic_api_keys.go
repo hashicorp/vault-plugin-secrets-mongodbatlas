@@ -357,18 +357,9 @@ func (b *Backend) programmaticAPIKeysRenew(ctx context.Context, req *logical.Req
 		maxLease = cred.MaxTTL
 	}
 
-	// Make sure we increase the VALID UNTIL endpoint for this user.
-	ttl, warns, err := framework.CalculateTTL(b.System(), req.Secret.Increment, defaultLease, 0, maxLease, 0, req.Secret.IssueTime)
-	if err != nil {
-		return nil, err
-	}
-
 	resp := &logical.Response{Secret: req.Secret}
 
-	for _, w := range warns {
-		resp.AddWarning(w)
-	}
-	resp.Secret.TTL = ttl
+	resp.Secret.TTL = defaultLease
 	resp.Secret.MaxTTL = maxLease
 
 	return resp, nil
