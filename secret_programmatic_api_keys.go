@@ -33,9 +33,9 @@ func (b *Backend) programmaticAPIKeys() *framework.Secret {
 	}
 }
 
-func (b *Backend) programmaticAPIKeyCreate(ctx context.Context, s logical.Storage, displayName string, cred *atlasCredentialEntry) (*logical.Response, error) {
+func (b *Backend) programmaticAPIKeyCreate(ctx context.Context, s logical.Storage, role string, cred *atlasCredentialEntry) (*logical.Response, error) {
 
-	apiKeyDescription, err := genUsername(displayName)
+	apiKeyDescription, err := genAPIKeyDescription(role)
 	if err != nil {
 		return nil, errwrap.Wrapf("error generating username: {{err}}", err)
 	}
@@ -44,7 +44,7 @@ func (b *Backend) programmaticAPIKeyCreate(ctx context.Context, s logical.Storag
 		return logical.ErrorResponse(err.Error()), nil
 	}
 	walID, err := framework.PutWAL(ctx, s, programmaticAPIKey, &walEntry{
-		UserName: apiKeyDescription,
+		Role: apiKeyDescription,
 	})
 	if err != nil {
 		return nil, errwrap.Wrapf("error writing WAL entry: {{err}}", err)
@@ -85,6 +85,7 @@ func (b *Backend) programmaticAPIKeyCreate(ctx context.Context, s logical.Storag
 		"programmatic_api_key_id": key.ID,
 		"project_id":              cred.ProjectID,
 		"organization_id":         cred.OrganizationID,
+		"role":                    role,
 	})
 
 	defaultLease, maxLease := b.getDefaultAndMaxLease()
@@ -330,13 +331,37 @@ func (b *Backend) pathProgrammaticAPIKeyRollback(ctx context.Context, req *logic
 }
 
 func (b *Backend) programmaticAPIKeysRenew(ctx context.Context, req *logical.Request, d *framework.FieldData) (*logical.Response, error) {
-	// Get the lease (if any)
+	//check if the role is on the secret
+	roleRaw, ok := req.Secret.InternalData["role"]
+	if !ok {
+		return nil, errors.New("internal data 'role' not found")
+	}
 
+	//get the credential entry
+	role := roleRaw.(string)
+	cred, err := b.credentialRead(ctx, req.Storage, role)
+	if err != nil {
+		return nil, errwrap.Wrapf("error retrieving credential: {{err}}", err)
+	}
+
+	if cred == nil {
+		return nil, errors.New("error retrieving credential: credential is nil")
+	}
+
+	// Get the lease (if any)
 	defaultLease, maxLease := b.getDefaultAndMaxLease()
+	if cred.TTL > 0 {
+		defaultLease = cred.MaxTTL
+	}
+	if cred.MaxTTL > 0 {
+		maxLease = cred.MaxTTL
+	}
 
 	resp := &logical.Response{Secret: req.Secret}
+
 	resp.Secret.TTL = defaultLease
 	resp.Secret.MaxTTL = maxLease
+
 	return resp, nil
 }
 
