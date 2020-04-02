@@ -85,6 +85,7 @@ func (b *Backend) programmaticAPIKeyCreate(ctx context.Context, s logical.Storag
 		"programmatic_api_key_id": key.ID,
 		"project_id":              cred.ProjectID,
 		"organization_id":         cred.OrganizationID,
+		"role":                    role,
 	})
 
 	defaultLease, maxLease := b.getDefaultAndMaxLease()
@@ -264,23 +265,46 @@ func (b *Backend) pathProgrammaticAPIKeyRollback(ctx context.Context, req *logic
 }
 
 func (b *Backend) programmaticAPIKeysRenew(ctx context.Context, req *logical.Request, d *framework.FieldData) (*logical.Response, error) {
+	//check if the role is on the secret
+	roleRaw, ok := req.Secret.InternalData["role"]
+	if !ok {
+		return nil, errors.New("internal data 'role' not found")
+	}
+
+	//get the credential entry
+	role := roleRaw.(string)
+	cred, err := b.credentialRead(ctx, req.Storage, role)
+	if err != nil {
+		return nil, errwrap.Wrapf("error retrieving credential: {{err}}", err)
+	}
+
+	if cred == nil {
+		return nil, errors.New("error retrieving credential: credential is nil")
+	}
+
 	// Get the lease (if any)
 	defaultLease, maxLease := b.getDefaultAndMaxLease()
+	if cred.TTL > 0 {
+		defaultLease = cred.MaxTTL
+	}
+	if cred.MaxTTL > 0 {
+		maxLease = cred.MaxTTL
+	}
 
-	// //get the role
-	// roleRaw, ok := req.Secret.InternalData["role"]
-	// if !ok {
-	// 	return nil, errors.New("internal data 'role' not found")
-	// }
-
-	// role, err := getRole(ctx, roleRaw.(string), req.Storage)
-	// if err != nil {
-	// 	return nil, err
-	// }
+	// Make sure we increase the VALID UNTIL endpoint for this user.
+	ttl, warns, err := framework.CalculateTTL(b.System(), req.Secret.Increment, defaultLease, 0, maxLease, 0, req.Secret.IssueTime)
+	if err != nil {
+		return nil, err
+	}
 
 	resp := &logical.Response{Secret: req.Secret}
-	resp.Secret.TTL = defaultLease
+
+	for _, w := range warns {
+		resp.AddWarning(w)
+	}
+	resp.Secret.TTL = ttl
 	resp.Secret.MaxTTL = maxLease
+
 	return resp, nil
 }
 
