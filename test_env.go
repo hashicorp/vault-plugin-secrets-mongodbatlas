@@ -79,6 +79,7 @@ func (e *testEnv) AddProgrammaticAPIKeyRole(t *testing.T) {
 func (e *testEnv) AddProgrammaticAPIKeyRoleWithProjectIDAndOrgID(t *testing.T) {
 	roles := []string{"ORG_MEMBER"}
 	projectRoles := []string{"GROUP_READ_ONLY"}
+	ips := []string{"192.168.1.1", "192.168.1.2"}
 	req := &logical.Request{
 		Operation: logical.UpdateOperation,
 		Path:      "roles/test-programmatic-key",
@@ -88,6 +89,7 @@ func (e *testEnv) AddProgrammaticAPIKeyRoleWithProjectIDAndOrgID(t *testing.T) {
 			"project_id":      e.ProjectID,
 			"roles":           roles,
 			"project_roles":   projectRoles,
+			"ip_addresses":    ips,
 		},
 	}
 	resp, err := e.Backend.HandleRequest(e.Context, req)

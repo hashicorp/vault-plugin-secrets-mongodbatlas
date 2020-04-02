@@ -128,6 +128,32 @@ func createProjectAPIKey(ctx context.Context, client *mongodbatlas.Client, apiKe
 			Desc:  apiKeyDescription,
 			Roles: credentialEntry.Roles,
 		})
+	if err != nil {
+		return nil, err
+	}
+
+	orgIDs := map[string]interface{}{}
+
+	// this is the only way to get the orgID needed for this request
+	for _, r := range key.Roles {
+		if _, ok := orgIDs[r.OrgID]; !ok {
+			if len(r.OrgID) > 0 {
+				orgIDs[r.OrgID] = 1
+			}
+		}
+	}
+
+	// if we have whitelist entries and no orgIds then return an error
+	if (len(credentialEntry.IPAddresses)+len(credentialEntry.CIDRBlocks)) > 0 && len(orgIDs) == 0 {
+		return nil, fmt.Errorf("No organization ID was found on programmatic key roles")
+	}
+
+	for orgID := range orgIDs {
+		if err := addWhitelistEntry(ctx, client, orgID, key.ID, credentialEntry); err != nil {
+			return nil, err
+		}
+	}
+
 	return key, err
 }
 
@@ -250,8 +276,48 @@ func (b *Backend) pathProgrammaticAPIKeyRollback(ctx context.Context, req *logic
 	}
 
 	if isProjectKey(entry.OrganizationID, entry.ProjectID) {
+
+		// we need the orgID to delete the Key
+		foundKey := mongodbatlas.APIKey{}
+		keys, _, err := client.ProjectAPIKeys.List(ctx, entry.ProjectID, nil)
+		if err != nil {
+			return err
+		}
+		for _, key := range keys {
+			if key.ID == entry.ProgrammaticAPIKeyID {
+				foundKey = key
+				break
+			}
+		}
+
+		if len(foundKey.Roles) == 0 {
+			return fmt.Errorf("missing roles on programmatic key %s", foundKey.ID)
+		}
+
+		// find the first orgID
+		orgID := ""
+		for _, r := range foundKey.Roles {
+			if len(r.OrgID) > 0 {
+				orgID = r.OrgID
+				break
+			}
+		}
+
+		// if orgID it's not found, return an error
+		if len(orgID) == 0 {
+			return fmt.Errorf("missing orgID on programmatic key %s", foundKey.ID)
+		}
+
 		// now, delete the user
 		res, err := client.ProjectAPIKeys.Unassign(ctx, entry.ProjectID, entry.ProgrammaticAPIKeyID)
+		if err != nil {
+			if res != nil && res.StatusCode == http.StatusNotFound {
+				return nil
+			}
+			return err
+		}
+		// now, delete the api key
+		res, err = client.APIKeys.Delete(ctx, orgID, entry.ProgrammaticAPIKeyID)
 		if err != nil {
 			if res != nil && res.StatusCode == http.StatusNotFound {
 				return nil
