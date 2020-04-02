@@ -287,7 +287,6 @@ func (b *Backend) pathProgrammaticAPIKeyRollback(ctx context.Context, req *logic
 				foundKey = key
 				break
 			}
-
 		}
 
 		if len(foundKey.Roles) == 0 {
