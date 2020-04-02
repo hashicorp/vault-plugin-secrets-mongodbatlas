@@ -275,8 +275,33 @@ func (b *Backend) pathProgrammaticAPIKeyRollback(ctx context.Context, req *logic
 	}
 
 	if isProjectKey(entry.OrganizationID, entry.ProjectID) {
+
+		// we need the orgID to delete the Key
+		foundKey := mongodbatlas.APIKey{}
+		keys, _, err := client.ProjectAPIKeys.List(ctx, entry.ProjectID, nil)
+		if err != nil {
+			return err
+		}
+		for _, key := range keys {
+			if key.ID == entry.ProgrammaticAPIKeyID {
+				foundKey = key
+				break
+			}
+
+		}
+
+		orgID := foundKey.Roles[0].OrgID
+
 		// now, delete the user
 		res, err := client.ProjectAPIKeys.Unassign(ctx, entry.ProjectID, entry.ProgrammaticAPIKeyID)
+		if err != nil {
+			if res != nil && res.StatusCode == http.StatusNotFound {
+				return nil
+			}
+			return err
+		}
+		// now, delete the api key
+		res, err = client.APIKeys.Delete(ctx, orgID, entry.ProgrammaticAPIKeyID)
 		if err != nil {
 			if res != nil && res.StatusCode == http.StatusNotFound {
 				return nil
