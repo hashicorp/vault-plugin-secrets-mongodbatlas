@@ -30,7 +30,7 @@ func (b *Backend) clientMongo(ctx context.Context, s logical.Storage) (*mongodba
 		return nil, err
 	}
 	if pluginEnv != nil {
-		client.UserAgent = useragent.PluginString(pluginEnv, "vault-plugin-secrets-mongodbatlas")
+		client.UserAgent = useragent.PluginString(pluginEnv, "mongodbatlas-secrets")
 	} else {
 		client.UserAgent = useragent.String()
 	}
