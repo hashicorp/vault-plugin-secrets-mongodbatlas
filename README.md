@@ -23,3 +23,19 @@ If you believe you have found a security issue in Vault or with this plugin, _pl
 contacting HashiCorp at [security@hashicorp.com](mailto:security@hashicorp.com) and contact MongoDB
 directly via [security@mongodb.com](mailto:security@mongodb.com) or
 [open a ticket](https://jira.mongodb.org/plugins/servlet/samlsso?redirectTo=%2Fbrowse%2FSECURITY) (link is external).
+
+## Running tests
+
+To run the acceptance tests, you need to set the following environment variables:
+
+```bash
+VAULT_ACC=1
+ATLAS_PRIVATE_KEY=...
+ATLAS_PUBLIC_KEY=...
+ATLAS_PROJECT_ID=...
+ATLAS_ORGANIZATION_ID=...
+```
+
+The programmatic API key provided must be an "Organization Owner", and must have
+your public IP address set as an allowed address. You can manage both of these
+through the Organization access manager view on the web UI.
