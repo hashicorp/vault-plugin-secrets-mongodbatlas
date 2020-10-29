@@ -16,7 +16,7 @@ docker run --rm -d -p8200:8200 --name vaultplg -v "$(pwd)/$tmpdir/data":/data -v
   "disable_mlock": true,
   "api_addr": "http://localhost:8200"
 }
-' vault server
+' docker.mirror.hashicorp.services/vault server
 sleep 1
 
 export VAULT_ADDR=http://localhost:8200
