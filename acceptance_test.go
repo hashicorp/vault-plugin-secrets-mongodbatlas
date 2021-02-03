@@ -77,7 +77,7 @@ func TestAcceptanceProgrammaticAPIKey_WithProjectIDRenew(t *testing.T) {
 
 }
 
-func TestAcceptanceProgrammaticAPIKey_ProjectWithIPWhitelist(t *testing.T) {
+func TestAcceptanceProgrammaticAPIKey_ProjectWithIPAccesslist(t *testing.T) {
 	if !runAcceptanceTests {
 		t.SkipNow()
 	}
@@ -95,7 +95,7 @@ func TestAcceptanceProgrammaticAPIKey_ProjectWithIPWhitelist(t *testing.T) {
 
 }
 
-func TestAcceptanceProgrammaticAPIKey_WithIPWhitelist(t *testing.T) {
+func TestAcceptanceProgrammaticAPIKey_WithIPAccesslist(t *testing.T) {
 	if !runAcceptanceTests {
 		t.SkipNow()
 	}
@@ -113,7 +113,7 @@ func TestAcceptanceProgrammaticAPIKey_WithIPWhitelist(t *testing.T) {
 
 }
 
-func TestAcceptanceProgrammaticAPIKey_WithCIDRWhitelist(t *testing.T) {
+func TestAcceptanceProgrammaticAPIKey_WithCIDRAccesslist(t *testing.T) {
 	if !runAcceptanceTests {
 		t.SkipNow()
 	}
@@ -131,7 +131,7 @@ func TestAcceptanceProgrammaticAPIKey_WithCIDRWhitelist(t *testing.T) {
 
 }
 
-func TestAcceptanceProgrammaticAPIKey_WithCIDRAndIPWhitelist(t *testing.T) {
+func TestAcceptanceProgrammaticAPIKey_WithCIDRAndIPAccesslist(t *testing.T) {
 	if !runAcceptanceTests {
 		t.SkipNow()
 	}
