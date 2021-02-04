@@ -103,7 +103,7 @@ github.com/pierrec/lz4
 github.com/pierrec/lz4/internal/xxh32
 # github.com/ryanuber/go-glob v1.0.0
 github.com/ryanuber/go-glob
-# go.mongodb.org/atlas v0.5.0
+# go.mongodb.org/atlas v0.7.2
 go.mongodb.org/atlas/mongodbatlas
 # golang.org/x/crypto v0.0.0-20190418165655-df01cb2cc480
 golang.org/x/crypto/blake2b
