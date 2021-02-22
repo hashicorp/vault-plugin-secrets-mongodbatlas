@@ -47,7 +47,7 @@ steps are usually completed by an operator or configuration management tool.
     of a public and private key so ensure you have both. Regarding roles, the Organization Owner and
     Project Owner roles should be sufficient for most needs, however be sure to check what each roles
     grants in the [MongoDB Atlas Programmatic API Key User Roles documentation](https://docs.atlas.mongodb.com/reference/user-roles/).
-    Also ensure you set an IP Whitelist when creating the key.
+    Also ensure you set an IP Access List when creating the key.
 
     For more detailed instructions on how to create a Programmatic API Key in the Atlas UI, including
     available roles, visit the [Programmatic API Key documenation](https://docs.atlas.mongodb.com/configure-api-access/#programmatic-api-keys).
@@ -81,8 +81,8 @@ either the MongoDB Atlas Organization or Project level with the designated role(
   - Must be granted appropriate roles to complete required tasks
   - Must belong to one organization, but may be granted access to any number of
     projects in that organization.
-  - May have an IP whitelist configured and some capabilities may require a
-    whitelist to be configured (these are noted in the MongoDB Atlas API
+  - May have an IP access list configured and some capabilities may require an
+    access list to be configured (these are noted in the MongoDB Atlas API
     documentation).
 
 
@@ -112,12 +112,12 @@ $ vault write mongodbatlas/roles/test \
 ```
 
 In both of these examples, after performing a read on `mongodbatlas/creds/test`, for an example of a `read` action
-refer to [## Programmatic API Key Whitelist](#programmatic-api-key-whitelist) section.
+refer to [## Programmatic API Key Access List](#programmatic-api-key-access-list) section.
 
-## Programmatic API Key Whitelist
+## Programmatic API Key Access List
 
-Programmatic API Key access can and should be limited with a IP Whitelist. In the following example both a CIDR
-block and IP address are added to the IP whitelist for Keys generated with this Vault role:
+Programmatic API Key access can and should be limited with an IP access list. In the following example both a CIDR
+block and IP address are added to the IP access list for Keys generated with this Vault role:
 
 ```bash
   $ vault write atlas/roles/test \
