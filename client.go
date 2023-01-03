@@ -3,6 +3,7 @@ package mongodbatlas
 import (
 	"context"
 	"errors"
+	"fmt"
 
 	"github.com/hashicorp/errwrap"
 	"github.com/hashicorp/vault/sdk/helper/useragent"
@@ -29,8 +30,7 @@ func (b *Backend) clientMongo(ctx context.Context, s logical.Storage) (*mongodba
 
 	pluginEnv, err := b.system.PluginEnv(ctx)
 	if err != nil {
-		b.Logger().Warn("failed to read plugin environment, user-agent will not be set",
-			"error", err)
+		return nil, fmt.Errorf("failed to read plugin environment: %w", err)
 	}
 	client.UserAgent = useragent.PluginString(pluginEnv, userAgentPluginName)
 
