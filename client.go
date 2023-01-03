@@ -11,6 +11,8 @@ import (
 	"go.mongodb.org/atlas/mongodbatlas"
 )
 
+const userAgentPluginName = "secrets-mongodbatlas"
+
 func (b *Backend) clientMongo(ctx context.Context, s logical.Storage) (*mongodbatlas.Client, error) {
 	b.clientMutex.Lock()
 	defer b.clientMutex.Unlock()
@@ -27,13 +29,10 @@ func (b *Backend) clientMongo(ctx context.Context, s logical.Storage) (*mongodba
 
 	pluginEnv, err := b.system.PluginEnv(ctx)
 	if err != nil {
-		return nil, err
+		b.Logger().Warn("failed to read plugin environment, user-agent will not be set",
+			"error", err)
 	}
-	if pluginEnv != nil {
-		client.UserAgent = useragent.PluginString(pluginEnv, "mongodbatlas-secrets")
-	} else {
-		client.UserAgent = useragent.String()
-	}
+	client.UserAgent = useragent.PluginString(pluginEnv, userAgentPluginName)
 
 	b.client = client
 
