@@ -12,7 +12,7 @@ import (
 	"go.mongodb.org/atlas/mongodbatlas"
 )
 
-const userAgentPluginName = "secrets-mongodbatlas"
+const userAgentPluginName = "mongodbatlas-secrets"
 
 func (b *Backend) clientMongo(ctx context.Context, s logical.Storage) (*mongodbatlas.Client, error) {
 	b.clientMutex.Lock()
