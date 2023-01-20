@@ -3,6 +3,7 @@ package mongodbatlas
 import (
 	"context"
 	"errors"
+	"fmt"
 
 	"github.com/hashicorp/errwrap"
 	"github.com/hashicorp/vault/sdk/helper/useragent"
@@ -10,6 +11,8 @@ import (
 	"github.com/mongodb-forks/digest"
 	"go.mongodb.org/atlas/mongodbatlas"
 )
+
+const userAgentPluginName = "mongodbatlas-secrets"
 
 func (b *Backend) clientMongo(ctx context.Context, s logical.Storage) (*mongodbatlas.Client, error) {
 	b.clientMutex.Lock()
@@ -27,13 +30,9 @@ func (b *Backend) clientMongo(ctx context.Context, s logical.Storage) (*mongodba
 
 	pluginEnv, err := b.system.PluginEnv(ctx)
 	if err != nil {
-		return nil, err
+		return nil, fmt.Errorf("failed to read plugin environment: %w", err)
 	}
-	if pluginEnv != nil {
-		client.UserAgent = useragent.PluginString(pluginEnv, "mongodbatlas-secrets")
-	} else {
-		client.UserAgent = useragent.String()
-	}
+	client.UserAgent = useragent.PluginString(pluginEnv, userAgentPluginName)
 
 	b.client = client
 
