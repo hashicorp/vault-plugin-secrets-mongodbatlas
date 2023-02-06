@@ -39,7 +39,6 @@ func TestAcceptanceProgrammaticAPIKey(t *testing.T) {
 	t.Run("read programmatic API key cred", acceptanceTestEnv.ReadProgrammaticAPIKeyRule)
 	t.Run("renew programmatic API key creds", acceptanceTestEnv.RenewProgrammaticAPIKeys)
 	t.Run("revoke programmatic API key creds", acceptanceTestEnv.RevokeProgrammaticAPIKeys)
-
 }
 
 func TestAcceptanceProgrammaticAPIKey_WithProjectID(t *testing.T) {
@@ -57,7 +56,6 @@ func TestAcceptanceProgrammaticAPIKey_WithProjectID(t *testing.T) {
 	t.Run("read programmatic API key cred", acceptanceTestEnv.ReadProgrammaticAPIKeyRule)
 	t.Run("renew programmatic API key creds", acceptanceTestEnv.RenewProgrammaticAPIKeys)
 	t.Run("revoke programmatic API key creds", acceptanceTestEnv.RevokeProgrammaticAPIKeys)
-
 }
 
 func TestAcceptanceProgrammaticAPIKey_WithProjectIDRenew(t *testing.T) {
@@ -77,9 +75,10 @@ func TestAcceptanceProgrammaticAPIKey_WithProjectIDRenew(t *testing.T) {
 	t.Run("extend programmatic API key creds", acceptanceTestEnv.RenewProgrammaticAPIKeysWithExtendedLease)
 	t.Run("check lease for programmatic API key cred", acceptanceTestEnv.CheckExtendedLease)
 	t.Run("revoke programmatic API key creds", acceptanceTestEnv.RevokeProgrammaticAPIKeys)
-
 }
 
+// requires IP to be set in the API key access list
+// see https://www.mongodb.com/docs/atlas/configure-api-access/
 func TestAcceptanceProgrammaticAPIKey_ProjectWithIPAccesslist(t *testing.T) {
 	if !runAcceptanceTests {
 		t.SkipNow()
@@ -95,9 +94,10 @@ func TestAcceptanceProgrammaticAPIKey_ProjectWithIPAccesslist(t *testing.T) {
 	t.Run("read programmatic API key cred", acceptanceTestEnv.ReadProgrammaticAPIKeyRule)
 	t.Run("renew programmatic API key creds", acceptanceTestEnv.RenewProgrammaticAPIKeys)
 	t.Run("revoke programmatic API key creds", acceptanceTestEnv.RevokeProgrammaticAPIKeys)
-
 }
 
+// requires IP to be set in the API key access list
+// see https://www.mongodb.com/docs/atlas/configure-api-access/
 func TestAcceptanceProgrammaticAPIKey_WithIPAccesslist(t *testing.T) {
 	if !runAcceptanceTests {
 		t.SkipNow()
@@ -113,9 +113,10 @@ func TestAcceptanceProgrammaticAPIKey_WithIPAccesslist(t *testing.T) {
 	t.Run("read programmatic API key cred", acceptanceTestEnv.ReadProgrammaticAPIKeyRule)
 	t.Run("renew programmatic API key creds", acceptanceTestEnv.RenewProgrammaticAPIKeys)
 	t.Run("revoke programmatic API key creds", acceptanceTestEnv.RevokeProgrammaticAPIKeys)
-
 }
 
+// requires IP to be set in the API key access list
+// see https://www.mongodb.com/docs/atlas/configure-api-access/
 func TestAcceptanceProgrammaticAPIKey_WithCIDRAccesslist(t *testing.T) {
 	if !runAcceptanceTests {
 		t.SkipNow()
@@ -131,9 +132,10 @@ func TestAcceptanceProgrammaticAPIKey_WithCIDRAccesslist(t *testing.T) {
 	t.Run("read programmatic API key cred", acceptanceTestEnv.ReadProgrammaticAPIKeyRule)
 	t.Run("renew programmatic API key creds", acceptanceTestEnv.RenewProgrammaticAPIKeys)
 	t.Run("revoke programmatic API key creds", acceptanceTestEnv.RevokeProgrammaticAPIKeys)
-
 }
 
+// requires IP to be set in the API key access list
+// see https://www.mongodb.com/docs/atlas/configure-api-access/
 func TestAcceptanceProgrammaticAPIKey_WithCIDRAndIPAccesslist(t *testing.T) {
 	if !runAcceptanceTests {
 		t.SkipNow()
@@ -149,9 +151,10 @@ func TestAcceptanceProgrammaticAPIKey_WithCIDRAndIPAccesslist(t *testing.T) {
 	t.Run("read programmatic API key cred", acceptanceTestEnv.ReadProgrammaticAPIKeyRule)
 	t.Run("renew programmatic API key creds", acceptanceTestEnv.RenewProgrammaticAPIKeys)
 	t.Run("revoke programmatic API key creds", acceptanceTestEnv.RevokeProgrammaticAPIKeys)
-
 }
 
+// requires IP to be set in the API key access list
+// see https://www.mongodb.com/docs/atlas/configure-api-access/
 func TestAcceptanceProgrammaticAPIKey_AssignToProject(t *testing.T) {
 	if !runAcceptanceTests {
 		t.SkipNow()
@@ -167,7 +170,6 @@ func TestAcceptanceProgrammaticAPIKey_AssignToProject(t *testing.T) {
 	t.Run("read programmatic API key cred", acceptanceTestEnv.ReadProgrammaticAPIKeyRule)
 	t.Run("renew programmatic API key creds", acceptanceTestEnv.RenewProgrammaticAPIKeys)
 	t.Run("revoke programmatic API key creds", acceptanceTestEnv.RevokeProgrammaticAPIKeys)
-
 }
 
 func TestAcceptanceProgrammaticAPIKey_WithTTL(t *testing.T) {
@@ -186,7 +188,6 @@ func TestAcceptanceProgrammaticAPIKey_WithTTL(t *testing.T) {
 	t.Run("check lease for programmatic API key cred", acceptanceTestEnv.CheckLease)
 	t.Run("renew programmatic API key creds", acceptanceTestEnv.RenewProgrammaticAPIKeys)
 	t.Run("revoke programmatic API key creds", acceptanceTestEnv.RevokeProgrammaticAPIKeys)
-
 }
 
 func newAcceptanceTestEnv() (*testEnv, error) {
