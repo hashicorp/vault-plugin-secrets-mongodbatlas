@@ -1,9 +1,6 @@
 TOOL?=vault-plugin-secrets-mongodbatlas
 TEST?=$$(go list ./... | grep -v /vendor/ | grep -v teamcity)
 VETARGS?=-asmdecl -atomic -bool -buildtags -copylocks -methods -nilfunc -printf -rangeloops -shift -structtags -unsafeptr
-EXTERNAL_TOOLS=\
-	github.com/mitchellh/gox \
-	github.com/golang/dep/cmd/dep
 BUILD_TAGS?=${TOOL}
 GOFMT_FILES?=$$(find . -name '*.go' | grep -v vendor)
 
@@ -13,9 +10,6 @@ bin: fmtcheck generate
 
 default: dev
 
-dockerbuild: fmtcheck
-	@CGO_ENABLED=0 BUILD_TAGS='$(BUILD_TAGS)' DOCKER_BUILD=1 sh -c "'$(CURDIR)/scripts/build.sh'"
-
 # dev creates binaries for testing Vault locally. These are put
 # into ./bin/ as well as $GOPATH/bin.
 dev: fmtcheck generate
@@ -24,6 +18,10 @@ dev: fmtcheck generate
 # test runs the unit tests and vets the code
 test: fmtcheck generate
 	CGO_ENABLED=0 VAULT_TOKEN= VAULT_ACC= go test -v -tags='$(BUILD_TAGS)' $(TEST) $(TESTARGS) -count=1 -timeout=20m -parallel=4
+
+# test runs the acceptance tests and vets the code
+testacc: fmtcheck generate
+	CGO_ENABLED=0 VAULT_TOKEN= VAULT_ACC=1 go test -v -tags='$(BUILD_TAGS)' $(TEST) $(TESTARGS) -count=1 -timeout=20m -parallel=4
 
 testcompile: fmtcheck generate
 	@for pkg in $(TEST) ; do \
@@ -35,13 +33,6 @@ testcompile: fmtcheck generate
 generate:
 	go generate $(go list ./... | grep -v /vendor/)
 
-# bootstrap the build by downloading additional tools
-bootstrap:
-	@for tool in  $(EXTERNAL_TOOLS) ; do \
-		echo "Installing/Updating $$tool" ; \
-		go get -u $$tool; \
-	done
-
 fmtcheck:
 	@sh -c "'$(CURDIR)/scripts/gofmtcheck.sh'"
 
@@ -51,4 +42,4 @@ fmt:
 proto:
 	protoc *.proto --go_out=plugins=grpc:.
 
-.PHONY: bin default generate test vet bootstrap fmt fmtcheck
+.PHONY: bin default generate test testacc fmt fmtcheck
