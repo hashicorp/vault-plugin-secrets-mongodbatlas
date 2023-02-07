@@ -65,11 +65,7 @@ func (b *Backend) programmaticAPIKeyCreate(ctx context.Context, s logical.Storag
 	}
 
 	if err != nil {
-		if walErr := framework.DeleteWAL(ctx, s, walID); walErr != nil {
-			dbUserErr := errwrap.Wrapf("error creating programmaticAPIKey: {{err}}", err)
-			return nil, errwrap.Wrap(errwrap.Wrapf("failed to delete WAL entry: {{err}}", walErr), dbUserErr)
-		}
-		return logical.ErrorResponse("Error creating programmatic api key: %s", err), err
+		return logical.ErrorResponse("Error creating programmatic api key: %s", err), nil
 	}
 
 	if key == nil {
@@ -244,7 +240,7 @@ func (b *Backend) programmaticAPIKeyRevoke(ctx context.Context, req *logical.Req
 	return nil, nil
 }
 
-func (b *Backend) pathProgrammaticAPIKeyRollback(ctx context.Context, req *logical.Request, _kind string, data interface{}) error {
+func (b *Backend) pathProgrammaticAPIKeyRollback(ctx context.Context, req *logical.Request, _ string, data interface{}) error {
 	var entry walEntry
 	if err := mapstructure.Decode(data, &entry); err != nil {
 		return err
