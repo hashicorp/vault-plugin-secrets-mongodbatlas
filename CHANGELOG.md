@@ -1,3 +1,12 @@
+## Unreleased
+
+### IMPROVEMENTS:
+
+* enable plugin multiplexing [GH-35](https://github.com/hashicorp/vault-plugin-secrets-mongodbatlas/pull/35)
+* update dependencies
+  * `github.com/hashicorp/vault/api` v1.9.0
+  * `github.com/hashicorp/vault/sdk` v0.8.1
+
 ## 0.9.1
 ### February 9, 2023
 
