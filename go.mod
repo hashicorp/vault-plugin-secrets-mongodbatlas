@@ -6,7 +6,7 @@ require (
 	github.com/frankban/quicktest v1.13.0 // indirect
 	github.com/go-test/deep v1.0.8
 	github.com/hashicorp/errwrap v1.1.0
-	github.com/hashicorp/go-hclog v1.0.0
+	github.com/hashicorp/go-hclog v1.5.0
 	github.com/hashicorp/go-secure-stdlib/base62 v0.1.2
 	github.com/hashicorp/vault/api v1.9.0
 	github.com/hashicorp/vault/sdk v0.8.1
