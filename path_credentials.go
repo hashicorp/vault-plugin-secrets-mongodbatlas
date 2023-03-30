@@ -20,6 +20,10 @@ var displayNameRegex = regexp.MustCompile("[^a-zA-Z0-9+=,.@_-]")
 func (b *Backend) pathCredentials() *framework.Path {
 	return &framework.Path{
 		Pattern: "creds/" + framework.GenericNameRegex("name"),
+		DisplayAttrs: &framework.DisplayAttributes{
+			OperationPrefix: operationPrefixMongoDBAtlas,
+			OperationVerb:   "generate",
+		},
 		Fields: map[string]*framework.FieldSchema{
 			"name": {
 				Type:        framework.TypeLowerCaseString,
@@ -27,9 +31,19 @@ func (b *Backend) pathCredentials() *framework.Path {
 				Required:    true,
 			},
 		},
-		Callbacks: map[logical.Operation]framework.OperationFunc{
-			logical.ReadOperation:   b.pathCredentialsRead,
-			logical.UpdateOperation: b.pathCredentialsRead,
+		Operations: map[logical.Operation]framework.OperationHandler{
+			logical.ReadOperation: &framework.PathOperation{
+				Callback: b.pathCredentialsRead,
+				DisplayAttrs: &framework.DisplayAttributes{
+					OperationSuffix: "credentials",
+				},
+			},
+			logical.UpdateOperation: &framework.PathOperation{
+				Callback: b.pathCredentialsRead,
+				DisplayAttrs: &framework.DisplayAttributes{
+					OperationSuffix: "credentials2",
+				},
+			},
 		},
 
 		HelpSynopsis:    pathCredentialsHelpSyn,

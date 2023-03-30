@@ -14,6 +14,12 @@ func (b *Backend) pathRolesList() *framework.Path {
 	return &framework.Path{
 		Pattern: "roles/?$",
 
+		DisplayAttrs: &framework.DisplayAttributes{
+			OperationPrefix: operationPrefixMongoDBAtlas,
+			OperationVerb:   "list",
+			OperationSuffix: "roles",
+		},
+
 		Callbacks: map[logical.Operation]framework.OperationFunc{
 			logical.ListOperation: b.operationListRoles,
 		},
