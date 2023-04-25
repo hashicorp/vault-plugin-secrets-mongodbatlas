@@ -14,6 +14,9 @@ import (
 	"go.mongodb.org/atlas/mongodbatlas"
 )
 
+// operationPrefixMongoDBAtlas is used as a prefix for OpenAPI operation id's.
+const operationPrefixMongoDBAtlas = "mongo-db-atlas"
+
 func Factory(ctx context.Context, conf *logical.BackendConfig) (logical.Backend, error) {
 	b := NewBackend(conf.System)
 	if err := b.Setup(ctx, conf); err != nil {
