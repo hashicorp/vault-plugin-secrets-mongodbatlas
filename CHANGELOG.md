@@ -1,5 +1,15 @@
 ## Unreleased
 
+## 0.10.1
+### September 1, 2023
+
+IMPROVEMENTS:
+* Update dependencies:
+  * github.com/hashicorp/vault/api v1.9.1 -> v1.9.2
+  * github.com/hashicorp/vault/sdk v0.9.0 -> v0.9.2
+  * github.com/mongodb-forks/digest v1.0.4 -> v1.0.5
+  * go.mongodb.org/atlas v0.25.0 -> v0.33.0
+
 ## 0.10.0
 ### May 23, 2023
 
