@@ -1,5 +1,8 @@
 ## Unreleased
 
+## 0.10.2
+### October 25, 2023
+
 IMPROVEMENTS:
 * Improve handing of fetching API keys for revocation of leases [GH-59](https://github.com/hashicorp/vault-plugin-secrets-mongodbatlas/pull/59)
 
