@@ -278,7 +278,15 @@ func (b *Backend) pathProgrammaticAPIKeyRollback(ctx context.Context, req *logic
 
 		// we need the orgID to delete the Key
 		foundKey := mongodbatlas.APIKey{}
-		keys, _, err := client.ProjectAPIKeys.List(ctx, entry.ProjectID, nil)
+
+		// define the list options to get all the keys
+		// currently pull 500 at a time, which is the max according to the docs
+		// https://www.mongodb.com/docs/atlas/reference/api-resources-spec/v2/#tag/Programmatic-API-Keys/operation/listProjectApiKeys
+		opts := &mongodbatlas.ListOptions{
+			ItemsPerPage: 500,
+		}
+
+		keys, _, err := client.ProjectAPIKeys.List(ctx, entry.ProjectID, opts)
 		if err != nil {
 			return err
 		}
@@ -287,6 +295,10 @@ func (b *Backend) pathProgrammaticAPIKeyRollback(ctx context.Context, req *logic
 				foundKey = key
 				break
 			}
+		}
+
+		if foundKey.ID == "" {
+			return fmt.Errorf("programmatic key %s not present in fetched page of API keys", entry.ProgrammaticAPIKeyID)
 		}
 
 		if len(foundKey.Roles) == 0 {
