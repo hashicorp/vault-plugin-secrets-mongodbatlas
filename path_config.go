@@ -104,6 +104,6 @@ Configure the  credentials that are used to manage Database Users.
 
 const pathConfigHelpDesc = `
 Before doing anything, the Atlas backend needs credentials that are able
-to manage databaseusers, access keys, etc. This endpoint is used to 
+to manage databaseusers, access keys, etc. This endpoint is used to
 configure those credentials.
 `
