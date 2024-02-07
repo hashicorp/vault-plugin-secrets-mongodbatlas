@@ -1,5 +1,16 @@
 ## Unreleased
 
+## v0.11.0
+### February 7, 2024
+IMPROVEMENTS:
+* Updated dependencies [GH-65](https://github.com/hashicorp/vault-plugin-secrets-mongodbatlas/pull/65):
+   * `github.com/hashicorp/vault/api` v1.9.2 -> v1.11.0
+   * `github.com/hashicorp/vault/sdk` v0.9.2 -> v0.10.2
+* Bump golang.org/x/crypto from 0.6.0 to 0.17.0 [GH-64](https://github.com/hashicorp/vault-plugin-secrets-mongodbatlas/pull/64)
+* Bump github.com/go-jose/go-jose/v3 from 3.0.0 to 3.0.1 [GH-63](https://github.com/hashicorp/vault-plugin-secrets-mongodbatlas/pull/63)
+* Bump google.golang.org/grpc from 1.53.0 to 1.56.3 [GH-62](https://github.com/hashicorp/vault-plugin-secrets-mongodbatlas/pull/62)
+* Bump golang.org/x/net from 0.8.0 to 0.17.0 [GH-58](https://github.com/hashicorp/vault-plugin-secrets-mongodbatlas/pull/58)
+
 ## 0.10.2
 ### October 25, 2023
 
