@@ -10,6 +10,8 @@ IMPROVEMENTS:
 * Bump github.com/go-jose/go-jose/v3 from 3.0.0 to 3.0.1 [GH-63](https://github.com/hashicorp/vault-plugin-secrets-mongodbatlas/pull/63)
 * Bump google.golang.org/grpc from 1.53.0 to 1.56.3 [GH-62](https://github.com/hashicorp/vault-plugin-secrets-mongodbatlas/pull/62)
 * Bump golang.org/x/net from 0.8.0 to 0.17.0 [GH-58](https://github.com/hashicorp/vault-plugin-secrets-mongodbatlas/pull/58)
+* Bump [github.com/docker/docker](https://github.com/docker/docker) from 24.0.5+incompatible to 24.0.7+incompatible [GH-67](https://github.com/hashicorp/vault-plugin-secrets-mongodbatlas/pull/67)
+* Bump google.golang.org/grpc from 1.57.0 to 1.57.1 [GH-66](https://github.com/hashicorp/vault-plugin-secrets-mongodbatlas/pull/66)
 
 ## 0.10.2
 ### October 25, 2023
