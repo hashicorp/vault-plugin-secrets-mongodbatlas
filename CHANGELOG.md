@@ -1,5 +1,18 @@
 ## Unreleased
 
+## v0.12.0
+### May 20, 2024
+IMPROVEMENTS:
+* Updated dependencies:
+  * `github.com/hashicorp/go-hclog` v1.5.0 -> v1.6.3
+  * `github.com/hashicorp/vault/api` v1.11.0 -> v1.13.0
+  * `github.com/hashicorp/vault/sdk` v0.10.2 -> v0.12.0
+  * `github.com/mongodb-forks/digest` v1.0.5 -> v1.1.0
+  * `go.mongodb.org/atlas` v0.33.0 -> v0.36.0
+  * `golang.org/x/net` v0.17.0 -> v0.23.0
+  * `github.com/docker/docker` v24.0.7+incompatible -> v24.0.9+incompatible
+* Upgrade `github.com/go-jose/go-jose/v3` to `github.com/go-jose/go-jose/v4`
+
 ## v0.11.0
 ### February 7, 2024
 IMPROVEMENTS:
