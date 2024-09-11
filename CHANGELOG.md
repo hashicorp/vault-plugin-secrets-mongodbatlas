@@ -1,5 +1,10 @@
 ## Unreleased
 
+## v0.13.0
+### Sept 10, 2024
+IMPROVEMENTS:
+* Updated dependencies [GH-79](https://github.com/hashicorp/vault-plugin-secrets-mongodbatlas/pull/79)
+
 ## v0.12.0
 ### May 20, 2024
 IMPROVEMENTS:
