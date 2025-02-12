@@ -1,5 +1,10 @@
 ## Unreleased
 
+## v0.14.0
+### Feb 12, 2025
+IMPROVEMENTS:
+* Updated dependencies
+
 ## v0.13.0
 ### Sept 10, 2024
 IMPROVEMENTS:
