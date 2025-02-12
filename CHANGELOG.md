@@ -1,5 +1,11 @@
 ## Unreleased
 
+## v0.14.0
+### Feb 12, 2025
+IMPROVEMENTS:
+* Update Go version to 1.23.3
+* Updated dependencies [GH-84](https://github.com/hashicorp/vault-plugin-secrets-mongodbatlas/pull/84)
+
 ## v0.13.0
 ### Sept 10, 2024
 IMPROVEMENTS:
