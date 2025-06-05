@@ -206,7 +206,8 @@ func newAcceptanceTestEnv() (*testEnv, error) {
 	if err != nil {
 		return nil, err
 	}
-	return &testEnv{
+
+	te := &testEnv{
 		PublicKey:      os.Getenv(envVarPublicKey),
 		PrivateKey:     os.Getenv(envVarPrivateKey),
 		ProjectID:      os.Getenv(envVarProjectID),
@@ -214,5 +215,10 @@ func newAcceptanceTestEnv() (*testEnv, error) {
 		Backend:        b,
 		Context:        ctx,
 		Storage:        &logical.InmemStorage{},
-	}, nil
+	}
+	if err := te.validate(); err != nil {
+		return nil, err
+	}
+
+	return te, nil
 }

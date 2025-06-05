@@ -20,7 +20,7 @@ jobs:
         with:
           go-version-file: .go-version
           cache: true
-      - name: Run Acceptance Tests
-        run: make testacc
       - name: Run Test Build
         run: make dev
+      - name: Run Acceptance Tests
+        run: make testacc
