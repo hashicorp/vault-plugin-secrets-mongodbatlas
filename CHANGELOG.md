@@ -1,3 +1,14 @@
+## v0.16.0
+### October 2, 2025
+
+* go version (#97)
+* [COMPLIANCE] Add Copyright and License Headers (#96)
+* Automated dependency upgrades (#86)
+* init changie (#95)
+* Add backport assistant workflow (#93)
+* Add backport assistant workflow (#92)
+* [Compliance] - PR Template Changes Required (#91)
+
 ## v0.14.0
 ### Feb 12, 2025
 IMPROVEMENTS:
