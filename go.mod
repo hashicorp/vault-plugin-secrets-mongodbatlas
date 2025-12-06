@@ -7,8 +7,8 @@ require (
 	github.com/hashicorp/errwrap v1.1.0
 	github.com/hashicorp/go-hclog v1.6.3
 	github.com/hashicorp/go-secure-stdlib/base62 v0.1.2
-	github.com/hashicorp/vault/api v1.21.0
-	github.com/hashicorp/vault/sdk v0.19.0
+	github.com/hashicorp/vault/api v1.22.0
+	github.com/hashicorp/vault/sdk v0.20.0
 	github.com/mitchellh/mapstructure v1.5.0
 	github.com/mongodb-forks/digest v1.1.0
 	go.mongodb.org/atlas v0.38.0
