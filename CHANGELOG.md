@@ -12,7 +12,6 @@ IMPROVEMENTS:
   * golang.org/x/net v0.42.0 => v0.47.0
   * github.com/hashicorp/vault/api v1.21.0 => v1.22.0
 
-
 ## v0.16.0
 ### October 2, 2025
 
