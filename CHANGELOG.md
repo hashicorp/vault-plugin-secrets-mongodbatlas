@@ -1,3 +1,9 @@
+## v0.18.0
+### September 9, 2026
+
+* chore: automated Go/dependency update via vault-plugin-release (#110)
+* updated crypto dependency to address secvuln (#108)
+
 ## v0.17.1
 ### March 20, 2026
 
