@@ -9,6 +9,7 @@ import (
 	"time"
 
 	"github.com/hashicorp/vault/sdk/framework"
+	"github.com/hashicorp/vault/sdk/helper/custommetadata"
 	"github.com/hashicorp/vault/sdk/logical"
 )
 
@@ -55,10 +56,15 @@ func (b *Backend) pathRoles() *framework.Path {
 				Description: `Duration in seconds after which the issued credential should expire. Defaults to 0, in which case the value will fallback to the system/mount defaults.`,
 			},
 			"max_ttl": {
-				Type:        framework.TypeDurationSecond,
-				Description: "The maximum allowed lifetime of credentials issued using this role.",
+					Type:        framework.TypeDurationSecond,
+					Description: "The maximum allowed lifetime of credentials issued using this role.",
+				},
+				"metadata": {
+					Type:        framework.TypeMap,
+					Description: "A map of string key-value pairs to associate with the role.",
+					Required:    false,
+				},
 			},
-		},
 
 		Callbacks: map[logical.Operation]framework.OperationFunc{
 			logical.DeleteOperation: b.pathRolesDelete,
@@ -149,6 +155,20 @@ func (b *Backend) pathRolesWrite(ctx context.Context, req *logical.Request, d *f
 		return logical.ErrorResponse("ttl exceeds max_ttl"), nil
 	}
 
+	if rawMeta, ok := d.GetOk("metadata"); ok {
+		cm, err := toStringMap(rawMeta)
+		if err != nil {
+			return logical.ErrorResponse("error parsing metadata: %s", err.Error()), nil
+		}
+		if err := custommetadata.Validate(cm); err != nil {
+			return logical.ErrorResponse(err.Error()), nil
+		}
+		credentialEntry.Metadata = cm
+	}
+	if credentialEntry.Metadata == nil {
+		credentialEntry.Metadata = make(map[string]string)
+	}
+
 	if err := setAtlasCredential(ctx, req.Storage, credentialName, credentialEntry); err != nil {
 		return nil, err
 	}
@@ -209,15 +229,16 @@ func (b *Backend) credentialRead(ctx context.Context, s logical.Storage, credent
 }
 
 type atlasCredentialEntry struct {
-	ProjectID      string        `json:"project_id"`
-	DatabaseName   string        `json:"database_name"`
-	Roles          []string      `json:"roles"`
-	OrganizationID string        `json:"organization_id"`
-	CIDRBlocks     []string      `json:"cidr_blocks"`
-	IPAddresses    []string      `json:"ip_addresses"`
-	ProjectRoles   []string      `json:"project_roles"`
-	TTL            time.Duration `json:"ttl"`
-	MaxTTL         time.Duration `json:"max_ttl"`
+	ProjectID      string            `json:"project_id"`
+	DatabaseName   string            `json:"database_name"`
+	Roles          []string          `json:"roles"`
+	OrganizationID string            `json:"organization_id"`
+	CIDRBlocks     []string          `json:"cidr_blocks"`
+	IPAddresses    []string          `json:"ip_addresses"`
+	ProjectRoles   []string          `json:"project_roles"`
+	TTL            time.Duration     `json:"ttl"`
+	MaxTTL         time.Duration     `json:"max_ttl"`
+	Metadata       map[string]string `json:"metadata"`
 }
 
 func (r atlasCredentialEntry) toResponseData() map[string]interface{} {
@@ -231,6 +252,7 @@ func (r atlasCredentialEntry) toResponseData() map[string]interface{} {
 		"project_roles":   r.ProjectRoles,
 		"ttl":             r.TTL.Seconds(),
 		"max_ttl":         r.MaxTTL.Seconds(),
+		"metadata":        r.Metadata,
 	}
 	return respData
 }
