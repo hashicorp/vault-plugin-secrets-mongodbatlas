@@ -1,3 +1,11 @@
+## v0.18.1
+### October 27, 2026
+
+* Vault 51779/fix update dependencies (#114)
+* VAULT-51779: chore: automated Go/dependency update via vault-plugin-release (#112)
+* [COMPLIANCE] Add/Update Copyright Headers (#107)
+* [CHANGELOG] Prepare for v0.18.0 release (#111)
+
 ## v0.18.0
 ### September 9, 2026
 
